@@ -1,0 +1,25 @@
+{
+    "freebsd": {
+        "description": "FreeBSD platform-specific configurations",
+        "type": "object",
+        "properties": {
+            "jail": {
+                "type": "object",
+                "properties": {
+                    "parent": {
+                        "type": "string"
+                    },
+                    "vnet": {
+                        "type": "string",
+                    },
+                    "enforce_statfs": {
+                        "type": "number",
+                    },
+                    "allow.raw_sockets": {
+                        "type": "boolean",
+                    }
+                }
+            }
+        }
+    }
+}

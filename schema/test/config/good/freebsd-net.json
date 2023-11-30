@@ -1,0 +1,13 @@
+{
+    "ociVersion": "1.0.0",
+    "root": {
+        "path": "rootfs"
+    },
+    "freebsd": {
+        "jail": {
+            "parent": "mypod",
+            "vnet": "new",
+            "allow.raw_sockets": true
+        }
+    }
+}

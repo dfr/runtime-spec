@@ -31,6 +31,8 @@ type Spec struct {
 	VM *VM `json:"vm,omitempty" platform:"vm"`
 	// ZOS is platform-specific configuration for z/OS based containers.
 	ZOS *ZOS `json:"zos,omitempty" platform:"zos"`
+	// FreeBSD is platform-specific configuration for FreeBSD based containers.
+	FreeBSD *FreeBSD `json:"freebsd,omitempty" platform:"freebsd"`
 }
 
 // Scheduler represents the scheduling attributes for a process. It is based on
@@ -887,3 +889,45 @@ const (
 	// SchedFlagUtilClampMin represents the utilization clamp maximum scheduling flag
 	SchedFlagUtilClampMax LinuxSchedulerFlag = "SCHED_FLAG_UTIL_CLAMP_MAX"
 )
+
+// These values are used to control access to features in the container, either
+// disabling the feature, sharing state with the parent or creating new private
+// state in the container.
+type FreeBSDSharing string
+
+const (
+	FREEBSD_SHARE_DISABLE FreeBSDSharing = "disable"
+	FREEBSD_SHARE_NEW     FreeBSDSharing = "new"
+	FREEBSD_SHARE_INHERIT FreeBSDSharing = "inherit"
+)
+
+// FreeBSDJail describes how to create the container's jail
+type FreeBSDJail struct {
+	// Parent jail name - this can be used to share a single vnet
+	// across several containers
+	Parent string `json:"parent,omitempty"`
+	// Whether to use parent UTS names or override in the container
+	Host FreeBSDSharing `json:"host,omitempty"`
+	// Which network stack to use for the container
+	Vnet FreeBSDSharing `json:"vnet,omitempty"`
+	// IPv4 address sharing for the container
+	Ip4 FreeBSDSharing `json:"ip4,omitempty"`
+	// IPv6 address sharing for the container
+	Ip6 FreeBSDSharing `json:"ip6,omitempty"`
+	// SystemV IPC message sharing for the container
+	SysVMsg FreeBSDSharing `json:"sysvmsg,omitempty"`
+	// SystemV semaphore message sharing for the container
+	SysVSem FreeBSDSharing `json:"sysvsem,omitempty"`
+	// SystemV memory sharing for the container
+	SysVShm FreeBSDSharing `json:"sysvmem,omitempty"`
+	// Mount visibility (see jail(8) for details)
+	EnforceStatfs *int `json:"enforceStatfs,omitempty"`
+	// Allow raw sockets
+	AllowRawSockets *bool `json:"allowRawSockets,omitempty"`
+}
+
+// FreeBSD contains platform-specific configuration for FreeBSD based containers.
+type FreeBSD struct {
+	// Jail definition for this container
+	Jail *FreeBSDJail `json:"jail,omitempty"`
+}
